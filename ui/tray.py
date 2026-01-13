@@ -7,6 +7,7 @@ import os
 class SystemTray(QSystemTrayIcon):
     request_input = Signal()
     request_settings = Signal()
+    request_report = Signal()
     toggle_pause = Signal(bool) # True for pause, False for resume
     request_exit = Signal()
 
@@ -43,6 +44,10 @@ class SystemTray(QSystemTrayIcon):
         settings_action = QAction("Settings", self)
         settings_action.triggered.connect(self.request_settings.emit)
         self.menu.addAction(settings_action)
+
+        report_action = QAction("Relatório", self)
+        report_action.triggered.connect(self.request_report.emit)
+        self.menu.addAction(report_action)
         
         self.menu.addSeparator()
         

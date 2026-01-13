@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatório WorkMonitor</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        h1,
+        h2 {
+            color: #2c3e50;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .controls {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #ecf0f1;
+            border-radius: 5px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 8px 15px;
+            cursor: pointer;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        label {
+            font-weight: bold;
+            margin-right: 5px;
+        }
+
+        input[type="date"] {
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        #report-sections {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f8f9fa;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 400px;
+            width: 100%;
+        }
+
+        #save-btn {
+            background-color: #27ae60;
+            margin-left: auto;
+        }
+
+        #save-btn:hover {
+            background-color: #219150;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Relatório de Atividades</h1>
+
+        <div class="controls">
+            <button onclick="setPeriod('lastMonth')">Mês Passado</button>
+            <button onclick="setPeriod('lastYear')">Ano Passado</button>
+            <span>|</span>
+            <label>De:</label> <input type="date" id="start-date">
+            <label>Até:</label> <input type="date" id="end-date">
+            <button onclick="generateReport()">Gerar Relatório</button>
+            <button id="save-btn" onclick="saveReport()" style="display:none;">Salvar Relatório</button>
+        </div>
+
+        <div id="report-sections">
+            <div id="period-display"></div>
+
+            <div class="section">
+                <h2>1. Contagem de Registros</h2>
+                <table id="count-table">
+                    <thead>
+                        <tr>
+                            <th>Atividade</th>
+                            <th>Contagem</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <div class="section">
+                <h2>2. Gráfico de Distribuição</h2>
+                <div class="chart-container">
+                    <canvas id="activityChart"></canvas>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>3. Horas Trabalhadas por Dia</h2>
+                <p><i>Estimativa: (8 horas / registros do dia) por registro.</i></p>
+                <div id="hours-table-container"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Data Injection Point -->
+    <script>
+        // Python will inject data here
+        // window.logData = [ {timestamp: "YYYY-MM-DD HH:MM:SS", activity: "Task A"}, ... ];
+        window.logData = [/* DATA_PLACEHOLDER */]; 
+    </script>
+
+    <script>
+        let myChart = null;
+
+        function formatDate(d) {
+            return d.toISOString().split('T')[0];
+        }
+
+        function setPeriod(type) {
+            const today = new Date();
+            let start = new Date();
+            let end = new Date();
+
+            if (type === 'lastMonth') {
+                start.setMonth(start.getMonth() - 1);
+                start.setDate(1);
+                end.setDate(0); // Last day of previous month
+            } else if (type === 'lastYear') {
+                start.setFullYear(start.getFullYear() - 1);
+                start.setMonth(0, 1);
+                end.setFullYear(end.getFullYear(), 11, 31);
+            }
+
+            document.getElementById('start-date').value = formatDate(start);
+            document.getElementById('end-date').value = formatDate(end);
+            generateReport();
+        }
+
+        function generateReport() {
+            const startStr = document.getElementById('start-date').value;
+            const endStr = document.getElementById('end-date').value;
+
+            if (!startStr || !endStr) {
+                alert("Por favor selecione um período.");
+                return;
+            }
+
+            const startDate = new Date(startStr + "T00:00:00");
+            const endDate = new Date(endStr + "T23:59:59");
+
+            if (!window.logData) {
+                alert("Nenhum dado encontrado.");
+                return;
+            }
+
+            // Filter Data
+            const filtered = window.logData.filter(row => {
+                const rowDate = new Date(row.timestamp);
+                return rowDate >= startDate && rowDate <= endDate;
+            });
+
+            if (filtered.length === 0) {
+                alert("Nenhum registro encontrado para este período.");
+                document.getElementById('report-sections').style.display = 'none';
+                document.getElementById('save-btn').style.display = 'none';
+                return;
+            }
+
+            document.getElementById('report-sections').style.display = 'block';
+            document.getElementById('save-btn').style.display = 'inline-block';
+            document.getElementById('period-display').innerText = `Período: ${startStr} a ${endStr}`;
+
+            // Part 1: Counts
+            const counts = {};
+            filtered.forEach(r => {
+                counts[r.activity] = (counts[r.activity] || 0) + 1;
+            });
+
+            const tbody = document.querySelector('#count-table tbody');
+            tbody.innerHTML = '';
+            Object.entries(counts).sort((a, b) => b[1] - a[1]).forEach(([act, count]) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td>${act}</td><td>${count}</td>`;
+                tbody.appendChild(tr);
+            });
+
+            // Part 2: Chart
+            const ctx = document.getElementById('activityChart').getContext('2d');
+            if (myChart) myChart.destroy();
+
+            myChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: Object.keys(counts),
+                    datasets: [{
+                        data: Object.values(counts),
+                        backgroundColor: [
+                            '#3498db', '#e74c3c', '#2ecc71', '#f1c40f', '#9b59b6',
+                            '#1abc9c', '#34495e', '#e67e22', '#7f8c8d'
+                        ]
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+
+            // Part 3: Hours Calculation
+            // Group by day first
+            const byDay = {};
+            filtered.forEach(r => {
+                const day = r.timestamp.split(' ')[0];
+                if (!byDay[day]) byDay[day] = [];
+                byDay[day].push(r.activity);
+            });
+
+            const dayTableContainer = document.getElementById('hours-table-container');
+            dayTableContainer.innerHTML = '';
+
+            const hoursTable = document.createElement('table');
+            hoursTable.innerHTML = `<thead><tr><th>Data</th><th>Atividade</th><th>Horas (aprox)</th></tr></thead><tbody></tbody>`;
+            const hBody = hoursTable.querySelector('tbody');
+
+            Object.keys(byDay).sort().forEach(day => {
+                const activities = byDay[day];
+                const totalRecords = activities.length;
+                const hoursPerRecord = 8.0 / totalRecords;
+
+                // Group activities within the day
+                const dayCounts = {};
+                activities.forEach(act => dayCounts[act] = (dayCounts[act] || 0) + 1);
+
+                Object.entries(dayCounts).forEach(([act, count]) => {
+                    const tr = document.createElement('tr');
+                    const hours = (count * hoursPerRecord).toFixed(2);
+                    tr.innerHTML = `<td>${day}</td><td>${act}</td><td>${hours}h</td>`;
+                    hBody.appendChild(tr);
+                });
+            });
+            dayTableContainer.appendChild(hoursTable);
+        }
+
+        function saveReport() {
+            const startStr = document.getElementById('start-date').value;
+            const endStr = document.getElementById('end-date').value;
+            const now = new Date();
+            const timestamp = now.toISOString().replace(/[:.]/g, '-').slice(0, 19);
+            const filename = `Relatorio_${startStr}_ate_${endStr}_CriadoEm_${timestamp}.html`;
+
+            // Clone the document to save current state (with charts and tables) is tricky because canvas is dynamic.
+            // Simple approach: Saving the source logic allows regeneration. 
+            // Better approach for "Static" save: The user asked to save the REPORT.
+            // Since this IS the report tool, maybe they just want to save the file generated?
+            // The requirement says: "O relatório deve ser salvo em um arquivo html contendo em seu nome o período..."
+
+            // The easiest way is to let the user save THIS page.
+            // Or we can create a download link for the current HTML state.
+            // However, JS logic is preserved, so opening it again works.
+
+            const htmlContent = document.documentElement.outerHTML;
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = filename;
+            a.click();
+        }
+    </script>
+</body>
+
+</html>

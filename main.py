@@ -3,6 +3,7 @@ from PySide6.QtWidgets import QApplication
 from core.settings_manager import SettingsManager
 from core.data_manager import DataManager
 from core.scheduler import Scheduler
+from core.report_manager import ReportManager
 from ui.tray import SystemTray
 from ui.input_window import InputWindow
 from ui.settings_window import SettingsWindow
@@ -20,6 +21,7 @@ def main():
     input_window = InputWindow(data_manager, settings_manager)
     settings_window = SettingsWindow(settings_manager)
     tray = SystemTray(scheduler)
+    report_manager = ReportManager()
 
     # Connect Signals
     
@@ -29,6 +31,7 @@ def main():
     # Tray actions
     tray.request_input.connect(input_window.show_window)
     tray.request_settings.connect(settings_window.show)
+    tray.request_report.connect(report_manager.launch_report_interface)
     tray.request_exit.connect(app.quit)
     
     # Pause/Resume
