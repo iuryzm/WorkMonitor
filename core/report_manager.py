@@ -1,15 +1,27 @@
 import csv
+import sys
 import json
 import os
 import webbrowser
 from datetime import datetime
 import tempfile
 
+
 class ReportManager:
     def __init__(self, settings_manager=None):
         self.settings_manager = settings_manager
         self.log_file = 'work_log.csv'
-        self.template_path = os.path.join(os.path.dirname(__file__), 'templates', 'report_template.html')
+        self.template_path = self.get_resource_path(os.path.join('core', 'templates', 'report_template.html'))
+
+    def get_resource_path(self, relative_path):
+        """ Get absolute path to resource, works for dev and for PyInstaller """
+        try:
+            # PyInstaller creates a temp folder and stores path in _MEIPASS
+            base_path = sys._MEIPASS
+        except Exception:
+            base_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) # Root dir in dev
+            
+        return os.path.join(base_path, relative_path)
 
     def get_log_data(self):
         data = []

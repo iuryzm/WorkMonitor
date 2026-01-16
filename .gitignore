@@ -20,3 +20,8 @@ work_log.csv
 .vscode/
 .idea/
 *.swp
+
+# Build artifacts
+build/
+dist/
+

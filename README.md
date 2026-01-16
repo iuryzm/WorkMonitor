@@ -39,6 +39,30 @@ WorkMonitor is a cross-platform desktop application designed to help you track y
 2.  The application will start minimized to the system tray. Use the tray icon (right-click) to access the menu.
 3.  When the prompt appears, type your activity and press Enter to save.
 
+## Build Executable
+
+To create a standalone executable, **you must run the build script on the operating system you are building for**. PyInstaller does not support cross-compilation (e.g., you cannot build a Windows .exe from Linux easily).
+
+### Linux
+
+Run the build script regarding your terminal:
+
+```bash
+./build_linux.sh
+```
+
+The executable will be located in `dist/WorkMonitor`.
+
+### Windows
+
+Run the build script:
+
+```bat
+build_windows.bat
+```
+
+The executable will be located in `dist\WorkMonitor.exe`.
+
 ## Development
 
 To run the tests:
