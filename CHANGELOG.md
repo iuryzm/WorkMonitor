@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Mostrar quanto tempo falta para aparecer na tela a próxima janela de registro de atividade, ou que horas ela irá aparecer.
 - build_windows.bat poderia criar um atalho para o executável criado em shell:startup, ou ao menos perguntar ao usuário se ele deseja isso.
+- Na tela de registro de atividade já poderíamos mostrar algumas opções já registradas, caso existam, ou para acessar as antigas bataria apertar em seta para cima ou para baixo no teclado. Isso facilitaria o acesso as entradas já resgistradas. Talvez poderia ter um botão para mostrar as tarefas já registradas.
 
 ## [0.2.0] - 2026-01-13
 
