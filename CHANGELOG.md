@@ -6,6 +6,8 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
+- Mostrar quanto tempo falta para aparecer na tela a próxima janela de registro de atividade, ou que horas ela irá aparecer.
+- build_windows.bat poderia criar um atalho para o executável criado em shell:startup, ou ao menos perguntar ao usuário se ele deseja isso.
 
 ## [0.2.0] - 2026-01-13
 
