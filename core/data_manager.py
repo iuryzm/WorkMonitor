@@ -30,3 +30,22 @@ class DataManager:
                     if len(row) > 1:
                         activities.add(row[1])
         return sorted(list(activities))
+
+    def get_recent_activities(self, limit=50):
+        activities = []
+        if os.path.exists(LOG_FILE):
+             with open(LOG_FILE, 'r', encoding='utf-8') as f:
+                reader = csv.reader(f)
+                next(reader, None)
+                all_rows = list(reader)
+                
+             seen = set()
+             for row in reversed(all_rows):
+                 if len(row) > 1:
+                     activity = row[1]
+                     if activity and activity not in seen:
+                         activities.append(activity)
+                         seen.add(activity)
+                         if len(activities) >= limit:
+                             break
+        return activities

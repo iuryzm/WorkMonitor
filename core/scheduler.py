@@ -30,3 +30,8 @@ class Scheduler(QObject):
 
     def is_paused(self):
         return self.paused
+
+    def get_remaining_time(self):
+        if self.paused or not self.timer.isActive():
+            return -1
+        return self.timer.remainingTime()

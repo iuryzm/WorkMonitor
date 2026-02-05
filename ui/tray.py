@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import QSystemTrayIcon, QMenu
 from PySide6.QtGui import QIcon, QAction
-from PySide6.QtCore import Signal
+from PySide6.QtCore import Signal, QTimer
 import os
 
 # Create a simple icon if none exists, or use system icon
@@ -28,7 +28,31 @@ class SystemTray(QSystemTrayIcon):
         self.setToolTip("Work Monitor")
         
         self.create_menu()
+        
+        # Timer so update tooltip with remaining time
+        self.tooltip_timer = QTimer(self)
+        self.tooltip_timer.timeout.connect(self.update_tooltip)
+        self.tooltip_timer.start(60000) # Update every minute
+        self.update_tooltip() # Initial update
+        
         self.show()
+
+    def update_tooltip(self):
+        remaining_ms = self.scheduler.get_remaining_time()
+        if remaining_ms < 0:
+            if self.scheduler.is_paused():
+                 self.setToolTip(f"Work Monitor (Paused)")
+            else:
+                 self.setToolTip(f"Work Monitor")
+        else:
+            minutes = remaining_ms // 60000
+            # If less than 1 minute, show "< 1 min"
+            if minutes == 0:
+                time_str = "< 1 min"
+            else:
+                time_str = f"{minutes} min"
+            
+            self.setToolTip(f"Work Monitor\nNext prompt in: {time_str}")
 
     def create_menu(self):
         self.menu = QMenu()

@@ -7,12 +7,18 @@ WorkMonitor is a cross-platform desktop application designed to help you track y
 - **Periodic Prompts**: An always-on-top input window appears at set intervals to ask for your current activity.
 - **Activity Logging**: All entries are saved with timestamps to `work_log.csv`.
 - **Autocomplete**: Remembers previous entries to speed up logging.
+- **Activity History**:
+    - Navigate through recent entries using Up/Down arrow keys.
+    - Quick access to past unique activities via a history button.
 - **System Tray Integration**:
+    - **Countdown**: Tooltip shows time remaining until the next prompt.
     - **New Entry**: Manually trigger the input window.
+    - **Report**: Generate visual reports of your activity.
     - **Pause/Resume**: Temporarily stop the prompts (e.g., during meetings or breaks).
     - **Settings**: Configure the prompt interval and sound effects.
     - **Exit**: Close the application.
 - **Cross-Platform**: Runs on Linux and Windows using PySide6.
+- **Startup Support**: Windows build script includes option to create a Startup shortcut.
 
 ## Requirements
 
