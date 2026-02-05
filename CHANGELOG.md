@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Changed
+- Ao colocar uma nova entrada a partir do uso da opção "New Entry" devemos reiniciar o tempo para a janela de nova atividade aparecer automaticamente.
+- Quando usarmos o build o arquivo work_log.csv não pode ser apagado, devemos manter o arquivo se já existir um.
+- Na janela de registro de nova atividade o botão "Show History" está sem label, vejo apenas o tooltip.
+- Precisamos de um visual melhor na janela de registro de nova atividade, deixando uma janela normal de um aplicativo, com fundo, barra de título e moldura.
+
 ## [0.3.0] - 2026-02-05
 
 ### Added
@@ -21,9 +27,6 @@ All notable changes to this project will be documented in this file.
 - Implementada funcionalidade de geração de relatórios em HTML.
     - Gera um arquivo visual com dados de atividades.
     - Permite visualização de registros e estatísticas.
-
-### Changed
-- 
 
 ## [0.1.1] - 2026-01-10
 
