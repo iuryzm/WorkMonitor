@@ -2,11 +2,17 @@ import csv
 import os
 from datetime import datetime
 
-LOG_FILE = 'work_log.csv'
+LOG_DIR = os.path.expanduser("~/.workmonitor")
+LOG_FILE = os.path.join(LOG_DIR, 'work_log.csv')
 
 class DataManager:
     def __init__(self):
+        self.ensure_log_directory()
         self.ensure_log_file()
+
+    def ensure_log_directory(self):
+        if not os.path.exists(LOG_DIR):
+            os.makedirs(LOG_DIR)
 
     def ensure_log_file(self):
         if not os.path.exists(LOG_FILE):

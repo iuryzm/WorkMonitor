@@ -16,41 +16,53 @@ class InputWindow(QWidget):
         self.init_ui()
 
     def init_ui(self):
-        self.setWindowTitle("Work Monitor")
-        self.setWindowFlags(Qt.WindowStaysOnTopHint | Qt.FramelessWindowHint | Qt.Tool)
-        self.setAttribute(Qt.WA_TranslucentBackground)
+        self.setWindowTitle("Log Activity")
+        # Removed FramelessWindowHint and TranslucentBackground to use native window
+        self.setWindowFlags(Qt.WindowStaysOnTopHint | Qt.Tool)
+        self.resize(400, 150) # Set a default reasonable size
         
         # Style
+        # Adjusted style to work better with standard frame
         self.setStyleSheet("""
             QWidget {
-                background-color: #2b2b2b;
-                color: #ffffff;
-                border: 1px solid #555555;
-                border-radius: 10px;
+                background-color: #f0f0f0;
+                color: #000000;
+                font-family: 'Segoe UI', sans-serif;
+            }
+            QLabel {
+                font-size: 14px;
+                font-weight: bold;
+                color: #333333;
             }
             QLineEdit {
-                background-color: #3b3b3b;
-                border: 1px solid #555555;
-                padding: 5px;
-                border-radius: 5px;
-                color: white;
+                background-color: #ffffff;
+                border: 1px solid #cccccc;
+                padding: 8px;
+                border-radius: 4px;
+                color: #333333;
             }
             QPushButton {
-                background-color: #007acc;
+                background-color: #0078d4;
                 border: none;
-                padding: 5px 15px;
-                border-radius: 5px;
+                padding: 8px 16px;
+                border-radius: 4px;
                 color: white;
+                font-weight: bold;
             }
             QPushButton:hover {
-                background-color: #005f9e;
+                background-color: #0063b1;
+            }
+            QToolTip {
+                background-color: #ffffff;
+                color: #333333;
+                border: 1px solid #cccccc; 
             }
         """)
 
         layout = QVBoxLayout()
         
         label = QLabel("What are you working on right now?")
-        label.setStyleSheet("border: none; font-size: 14px; font-weight: bold;")
+        # label.setStyleSheet("border: none; font-size: 14px; font-weight: bold;") # Style moved to global stylesheet
         layout.addWidget(label)
 
         self.input_field = QLineEdit()
@@ -65,9 +77,9 @@ class InputWindow(QWidget):
         self.submit_btn.clicked.connect(self.submit_activity)
         btn_layout.addWidget(self.submit_btn)
 
-        self.history_btn = QPushButton("▼")
-        self.history_btn.setFixedWidth(30)
-        self.history_btn.setToolTip("Show History")
+        self.history_btn = QPushButton("History")
+        # self.history_btn.setFixedWidth(30) # Let it size to content
+        self.history_btn.setToolTip("Show past activities")
         self.history_btn.clicked.connect(self.show_history_menu)
         btn_layout.addWidget(self.history_btn)
         
@@ -116,15 +128,15 @@ class InputWindow(QWidget):
         menu = QMenu(self)
         menu.setStyleSheet("""
             QMenu {
-                background-color: #2b2b2b;
-                color: #ffffff;
-                border: 1px solid #555555;
+                background-color: #ffffff;
+                color: #333333;
+                border: 1px solid #cccccc;
             }
             QMenu::item {
-                padding: 5px 20px;
+                padding: 6px 24px;
             }
             QMenu::item:selected {
-                background-color: #007acc;
+                background-color: #e6e6e6;
             }
         """)
         

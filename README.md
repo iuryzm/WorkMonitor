@@ -5,7 +5,7 @@ WorkMonitor is a cross-platform desktop application designed to help you track y
 ## Features
 
 - **Periodic Prompts**: An always-on-top input window appears at set intervals to ask for your current activity.
-- **Activity Logging**: All entries are saved with timestamps to `work_log.csv`.
+- **Activity Logging**: All entries are saved with timestamps to `~/.workmonitor/work_log.csv` (Unix) or `%USERPROFILE%\.workmonitor\work_log.csv` (Windows).
 - **Autocomplete**: Remembers previous entries to speed up logging.
 - **Activity History**:
     - Navigate through recent entries using Up/Down arrow keys.

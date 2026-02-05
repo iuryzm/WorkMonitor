@@ -2,14 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
-
 ## [Unreleased]
 
+## [0.3.1] - 2026-02-05
+
 ### Changed
-- Ao colocar uma nova entrada a partir do uso da opção "New Entry" devemos reiniciar o tempo para a janela de nova atividade aparecer automaticamente.
-- Quando usarmos o build o arquivo work_log.csv não pode ser apagado, devemos manter o arquivo se já existir um.
-- Na janela de registro de nova atividade o botão "Show History" está sem label, vejo apenas o tooltip.
-- Precisamos de um visual melhor na janela de registro de nova atividade, deixando uma janela normal de um aplicativo, com fundo, barra de título e moldura.
+- **Timer Logic**: The interval timer is now reset automatically when a "New Entry" is manually requested, and restarted when an activity is submitted.
+- **Data Persistence**: Activity logs are now stored in the user's home directory (`~/.workmonitor/work_log.csv`) instead of the application directory. This ensures data is preserved across application updates/builds.
+- **UI Improvements**: 
+    - The activity input window now uses a standard window frame (title bar, minimize/close buttons) for better OS integration.
+    - Updated styles for a cleaner look.
+    - Added clear "History" label to the history button.
 
 ## [0.3.0] - 2026-02-05
 

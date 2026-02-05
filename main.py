@@ -27,9 +27,21 @@ def main():
     
     # Scheduler triggers input
     scheduler.trigger_input.connect(input_window.show_window)
+    # Also update tooltip when timer naturally restarts (loop)
+    scheduler.trigger_input.connect(tray.update_tooltip)
+    
+    # Update tooltip when timer is explicitly restarted/reset
+    scheduler.timer_restarted.connect(tray.update_tooltip)
+    
+    # Reset timer when activity is submitted
+    input_window.submitted.connect(scheduler.reset_timer)
     
     # Tray actions
-    tray.request_input.connect(input_window.show_window)
+    def handle_manual_entry():
+        input_window.show_window()
+        scheduler.reset_timer()
+
+    tray.request_input.connect(handle_manual_entry)
     tray.request_settings.connect(settings_window.show)
     tray.request_report.connect(report_manager.launch_report_interface)
     tray.request_exit.connect(app.quit)

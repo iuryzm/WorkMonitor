@@ -3,6 +3,7 @@ from core.settings_manager import SettingsManager
 
 class Scheduler(QObject):
     trigger_input = Signal()
+    timer_restarted = Signal()
 
     def __init__(self, settings_manager: SettingsManager):
         super().__init__()
@@ -17,6 +18,7 @@ class Scheduler(QObject):
         interval_ms = self.settings_manager.get_interval() * 60 * 1000
         if interval_ms > 0 and not self.paused:
              self.timer.start(interval_ms)
+             self.timer_restarted.emit()
         else:
             self.timer.stop()
 
@@ -35,3 +37,8 @@ class Scheduler(QObject):
         if self.paused or not self.timer.isActive():
             return -1
         return self.timer.remainingTime()
+
+    def reset_timer(self):
+        if not self.paused:
+             self.timer.stop()
+             self.apply_settings() # This emits timer_restarted via apply_settings
