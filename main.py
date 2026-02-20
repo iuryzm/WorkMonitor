@@ -1,7 +1,9 @@
 import sys
 from PySide6.QtWidgets import QApplication
+from PySide6.QtGui import QDesktopServices
+from PySide6.QtCore import QUrl
 from core.settings_manager import SettingsManager
-from core.data_manager import DataManager
+from core.data_manager import DataManager, LOG_FILE
 from core.scheduler import Scheduler
 from core.report_manager import ReportManager
 from ui.tray import SystemTray
@@ -44,6 +46,7 @@ def main():
     tray.request_input.connect(handle_manual_entry)
     tray.request_settings.connect(settings_window.show)
     tray.request_report.connect(report_manager.launch_report_interface)
+    tray.request_edit_log.connect(lambda: QDesktopServices.openUrl(QUrl.fromLocalFile(LOG_FILE)))
     tray.request_exit.connect(app.quit)
     
     # Pause/Resume

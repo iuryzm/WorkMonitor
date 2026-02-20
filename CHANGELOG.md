@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [0.3.2] - 2026-02-20
+
 ### Added
 - Adicionada uma entrada no menu que aparece ao apertar o botão direito no ícone da bandeja (system tray) para editar o arquivo work_log.csv. O arquivo é aberto no editor de texto padrão do sistema.
 

@@ -14,6 +14,7 @@ WorkMonitor is a cross-platform desktop application designed to help you track y
     - **Countdown**: Tooltip shows time remaining until the next prompt.
     - **New Entry**: Manually trigger the input window.
     - **Report**: Generate visual reports of your activity.
+    - **Editar Log**: Open the activity log file in your default text editor.
     - **Pause/Resume**: Temporarily stop the prompts (e.g., during meetings or breaks).
     - **Settings**: Configure the prompt interval and sound effects.
     - **Exit**: Close the application.

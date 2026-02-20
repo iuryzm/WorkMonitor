@@ -8,6 +8,7 @@ class SystemTray(QSystemTrayIcon):
     request_input = Signal()
     request_settings = Signal()
     request_report = Signal()
+    request_edit_log = Signal()
     toggle_pause = Signal(bool) # True for pause, False for resume
     request_exit = Signal()
 
@@ -72,6 +73,10 @@ class SystemTray(QSystemTrayIcon):
         report_action = QAction("Relatório", self)
         report_action.triggered.connect(self.request_report.emit)
         self.menu.addAction(report_action)
+        
+        edit_log_action = QAction("Editar Log", self)
+        edit_log_action.triggered.connect(self.request_edit_log.emit)
+        self.menu.addAction(edit_log_action)
         
         self.menu.addSeparator()
         
