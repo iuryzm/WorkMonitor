@@ -9,6 +9,9 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Adicionada uma entrada no menu que aparece ao apertar o botão direito no ícone da bandeja (system tray) para editar o arquivo work_log.csv. O arquivo é aberto no editor de texto padrão do sistema.
 
+### Fixed
+- Corrigido o erro de `ModuleNotFoundError` no script `build_windows.bat` garantindo que o `PySide6` estará disponível no ambiente de construção do PyInstaller.
+
 ## [0.3.1] - 2026-02-05
 
 ### Changed
